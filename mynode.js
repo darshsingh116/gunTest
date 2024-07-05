@@ -4,7 +4,7 @@ import 'gun/sea.js'; // Include if using SEA with Gun
 import bodyParser from 'body-parser';
 
 // Initialize GUNDB and Express
-const gun = Gun({ peers: ['ws://13.201.48.114:8765/gun','http://13.201.48.114:8765/gun'] });
+const gun = Gun({ peers: ['ws://13.201.48.114:8765/gun','http://13.201.48.114:8765/gun','ws://13.201.48.114:3000/gun','http://13.201.48.114:3000/gun','ws://13.201.48.177:8765/gun','http://13.201.48.177:8765/gun','ws://13.201.48.177:3000/gun','http://13.201.48.177:3000/gun'] });
 const app = express();
 app.use(bodyParser.json());
 
