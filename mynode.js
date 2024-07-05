@@ -4,9 +4,39 @@ import 'gun/sea.js'; // Include if using SEA with Gun
 import bodyParser from 'body-parser';
 
 // Initialize GUNDB and Express
-const gun = Gun();
+const gun = Gun({ peers: ['ws://13.201.48.114:8765/gun'] });
 const app = express();
 app.use(bodyParser.json());
+
+
+function monitorOutEvent(gun) {
+  gun.on('out', { peers: true, rad: true }, (ctx) => {
+      console.log('Out event fired:');
+      console.log('Peers:', ctx.peers); // Log connected peers
+      console.log('Transport details:', ctx.rad); // Log transport details
+  });
+}
+function monitorByeEvent(gun) {
+  gun.on('bye', (peer) => {
+      console.log('Disconnected from peer:', peer);
+  });
+}
+function checkPeerStatus(gun) {
+  const meshConfig = gun.back('opt.mesh'); // Get mesh configuration
+  const peers = meshConfig; // Fetch status from mesh
+
+  console.log('Current peer status:');
+  console.log(peers);
+}
+
+// Monitor out event
+monitorOutEvent(gun);
+
+// Monitor bye event
+monitorByeEvent(gun);
+
+// Check peer status
+checkPeerStatus(gun);
 
 // Function to create a new user
 // Function to create a new user
@@ -45,6 +75,7 @@ function createUser(username, password, name, callback) {
       }
     });
   }
+  
   
 
 // Function to get a user's name by username
