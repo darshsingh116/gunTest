@@ -4,9 +4,16 @@ import 'gun/sea.js'; // Include if using SEA with Gun
 import bodyParser from 'body-parser';
 
 // Initialize GUNDB and Express
-const gun = Gun({ web: server,peers: ['ws://13.201.48.114:8765/gun','http://13.201.48.114:8765/gun','ws://13.201.48.114:3000/gun','http://13.201.48.114:3000/gun','ws://13.201.48.177:8765/gun','http://13.201.48.177:8765/gun','ws://13.201.48.177:3000/gun','http://13.201.48.177:3000/gun'] });
 const app = express();
 app.use(bodyParser.json());
+// Start the server
+const PORT = process.env.PORT || 3000;
+const server = app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
+Gun({web: server})
+
+const gun = Gun({ peers: ['ws://13.201.48.114:8765/gun','http://13.201.48.114:8765/gun','ws://13.201.48.114:3000/gun','http://13.201.48.114:3000/gun','ws://13.201.48.177:8765/gun','http://13.201.48.177:8765/gun','ws://13.201.48.177:3000/gun','http://13.201.48.177:3000/gun'] });
 
 function monitorOutEvent(gun) {
   gun.on('out', { peers: true, rad: true }, (ctx) => {
@@ -129,8 +136,3 @@ app.get('/getUser/:username', (req, res) => {
   });
 });
 
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
